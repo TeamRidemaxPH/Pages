@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Directory</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #fafafa;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #fff;
+    border-bottom: 1px solid #ebebeb;
+    padding: 14px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #f0f0f0;
+    border: 1px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .header-logo-placeholder {
+    font-size: 9px;
+    color: #bbb;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .header-text h1 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    color: #1a1a1a;
+  }
+
+  .header-text p {
+    font-size: 11px;
+    color: #999;
+    margin-top: 1px;
+  }
+
+  .brand-list {
+    padding: 12px 16px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .brand-card {
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: #f0f0f0;
+    border: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    flex-shrink: 0;
+    text-align: center;
+    line-height: 1.2;
+    padding: 4px;
+    overflow: hidden;
+  }
+
+  .brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .brand-right {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .brand-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.3;
+  }
+
+  .social-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 2px;
+  }
+
+  .social-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+
+  .social-icon svg {
+    width: 12px;
+    height: 12px;
+    fill: #fff;
+  }
+
+  .social-icon.fb { background: #1877F2; }
+  .social-icon.ig { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+
+  .social-link-url {
+    font-size: 11px;
+    color: #3b82f6;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+
+  .social-link-url:active { opacity: 0.6; }
+
+  .ig-username {
+    font-size: 11px;
+    color: #888;
+    margin-left: 29px;
+    margin-top: -1px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo">
+    <div class="header-logo-placeholder">Your<br>Logo</div>
+  </div>
+  <div class="header-text">
+    <h1>Brand Directory</h1>
+    <p>19 brands</p>
+  </div>
+</header>
+
+<div class="brand-list" id="brandList"></div>
+
+<script>
+const FB_SVG = `<svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
+const IG_SVG = `<svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>`;
+
+const brands = [
+  { name: "Arivo Tires Philippines", fb: "https://www.facebook.com/arivotiresph/", ig: "https://www.instagram.com/arivotiresph/", igUser: "@arivotiresph" },
+  { name: "Team RJC - ARB 4x4 Philippines", fb: "https://www.facebook.com/TeamRJC.ARB4x4Philippines/", ig: "https://www.instagram.com/teamrjc_arb4x4philippines/", igUser: "@teamrjc_arb4x4philippines" },
+  { name: "Atlander Tires Philippines", fb: "https://www.facebook.com/AtlanderTiresPH/", ig: "https://www.instagram.com/atlandertiresph/", igUser: "@atlandertiresph" },
+  { name: "Airpro Fragrances Philippines", fb: "https://www.facebook.com/airprofragrancesph/", ig: "https://www.instagram.com/airprofragrancesph/", igUser: "@airprofragrancesph" },
+  { name: "Hamer Philippines", fb: "https://www.facebook.com/hamer4x4ph/", ig: "https://www.instagram.com/hamerph/", igUser: "@hamerph" },
+  { name: "Monsta Philippines", fb: "https://www.facebook.com/monstatiresph/", ig: "https://www.instagram.com/monstatyresph/", igUser: "@monstatyresph" },
+  { name: "Apollo Tyres - Team Ridemax Philippines", fb: "https://www.facebook.com/ApolloTyresxTeamRidemaxPH/", ig: "https://www.instagram.com/apollotyres_teamridemaxph/", igUser: "@apollotyres_teamridemaxph" },
+  { name: "Cooper Tires PH", fb: "https://www.facebook.com/CooperTiresPhilippines/", ig: "https://www.instagram.com/coopertires_teamridemaxph/", igUser: "@coopertires_teamridemaxph" },
+  { name: "Team Ridemax Philippines", fb: "https://www.facebook.com/TeamRidemaxPH/", ig: "https://www.instagram.com/teamridemaxph/", igUser: "@teamridemaxph" },
+  { name: "Japervis Baby Philippines", fb: "https://www.facebook.com/JapervisBabyPH/", ig: "https://www.instagram.com/japervisbabyph/", igUser: "@japervisbabyph" },
+  { name: "Linglong Tires - Team Ridemax Philippines", fb: "https://www.facebook.com/LinglongTiresPH/", ig: "https://www.instagram.com/linglongtiresph/", igUser: "@linglongtiresph" },
+  { name: "Profender Motorcycle Suspension Philippines", fb: "https://www.facebook.com/PFDMotorcyclePH/", ig: "https://www.instagram.com/profendermotorcycleph/", igUser: "@profendermotorcycleph" },
+  { name: "Team Ridemax - Michelin Tires Philippines", fb: "https://www.facebook.com/TeamRidemaxMichelinPH/", ig: "https://www.instagram.com/michelin_teamridemaxph/", igUser: "@michelin_teamridemaxph" },
+  { name: "Venom Power Tires Philippines", fb: "https://www.facebook.com/VenomPowerTiresPH/", ig: "https://www.instagram.com/venompowertiresph/", igUser: "@venompowertiresph" },
+  { name: "ICOOH Brakes Philippines", fb: "https://www.facebook.com/IcoohBrakesPH/", ig: "https://www.instagram.com/icoohbrakesph/", igUser: "@icoohbrakesph" },
+  { name: "Wheel Pros Philippines", fb: "https://www.facebook.com/WheelProsPH/", ig: "https://www.instagram.com/wheelpros_philippines/", igUser: "@wheelpros_philippines" },
+  { name: "Profender x Ridemax Philippines", fb: "https://www.facebook.com/ProfenderxRidemaxPH/", ig: "https://www.instagram.com/profenderxridemaxph/", igUser: "@profenderxridemaxph" },
+  { name: "Team Ridemax - BFGoodrich Tires Philippines", fb: "https://www.facebook.com/TeamRidemaxBFGPH/", ig: "https://www.instagram.com/bfgoodrich_teamridemaxph/", igUser: "@bfgoodrich_teamridemaxph" },
+  { name: "VLF Wheels Philippines", fb: "https://www.facebook.com/vlfwheelsph/", ig: "https://www.instagram.com/vlfwheelsph/", igUser: "@vlfwheelsph" },
+];
+
+const list = document.getElementById('brandList');
+
+brands.forEach((brand, i) => {
+  const initials = brand.name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase();
+  const card = document.createElement('div');
+  card.className = 'brand-card';
+  card.innerHTML = `
+    <div class="brand-logo" id="logo-${i}">
+      <img src="${brand.name}.svg" alt="${brand.name}" 
+        onload="this.parentElement.style.background='#fff';this.parentElement.style.padding='4px'"
+        onerror="this.parentElement.innerHTML='${initials}'">
+    </div>
+    <div class="brand-right">
+      <div class="brand-name">${brand.name}</div>
+      <div class="social-rows">
+        <div class="social-row">
+          <div class="social-icon fb">${FB_SVG}</div>
+          <a href="${brand.fb}" class="social-link-url" target="_blank" rel="noopener">${brand.fb}</a>
+        </div>
+        <div class="social-row">
+          <div class="social-icon ig">${IG_SVG}</div>
+          <a href="${brand.ig}" class="social-link-url" target="_blank" rel="noopener">${brand.ig}</a>
+        </div>
+        <div class="ig-username">${brand.igUser}</div>
+      </div>
+    </div>
+  `;
+  list.appendChild(card);
+});
+</script>
+
+</body>
+</html>
