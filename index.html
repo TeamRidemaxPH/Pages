@@ -211,6 +211,20 @@ const brands = [
   ig: "https://www.instagram.com/wildlandph/",
   igUser: "@wildlandph"
 },
+{
+  name: "Hankook Tire - Team Ridemax Philippines",
+  fb: "https://www.facebook.com/HankookTirePhilippines/"
+},
+
+{
+  name: "KST Tire Philippines",
+  fb: "https://www.facebook.com/KSTTirePhilippines/"
+},
+
+{
+  name: "Team Ridemax Careers",
+  fb: "https://www.facebook.com/CareersAtTeamRidemax"
+},
 ];
 
 const list = document.getElementById('brandList');
@@ -221,25 +235,37 @@ brands.forEach((brand, i) => {
   card.className = 'brand-card';
   card.innerHTML = `
     <div class="brand-logo" id="logo-${i}">
-      <img src="${brand.name}.svg" alt="${brand.name}" 
+      <img src="${brand.name}.svg" alt="${brand.name}"
         onload="this.parentElement.style.background='#fff';this.parentElement.style.padding='4px'"
         onerror="this.parentElement.innerHTML='${initials}'">
     </div>
+
     <div class="brand-right">
       <div class="brand-name">${brand.name}</div>
+
       <div class="social-rows">
+
         <div class="social-row">
           <div class="social-icon fb">${FB_SVG}</div>
-          <a href="${brand.fb}" class="social-link-url" target="_blank" rel="noopener">${brand.fb}</a>
+          <a href="${brand.fb}" class="social-link-url" target="_blank" rel="noopener">
+            ${brand.fb}
+          </a>
         </div>
+
+        ${brand.ig ? `
         <div class="social-row">
           <div class="social-icon ig">${IG_SVG}</div>
-          <a href="${brand.ig}" class="social-link-url" target="_blank" rel="noopener">${brand.ig}</a>
+          <a href="${brand.ig}" class="social-link-url" target="_blank" rel="noopener">
+            ${brand.ig}
+          </a>
         </div>
-        <div class="ig-username">${brand.igUser}</div>
-      </div>
+
+        <div class="ig-username">${brand.igUser || ""}</div>
+      ` : ""}
+
     </div>
-  `;
+  </div>
+`;
   list.appendChild(card);
 });
 </script>
